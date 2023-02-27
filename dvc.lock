@@ -1,0 +1,90 @@
+schema: '2.0'
+stages:
+  train_dev_split:
+    cmd: python -m src.data.train_dev_split
+    deps:
+    - path: data/raw/dbbook/train.tsv
+      md5: 69a8d7b356aa245720861c0091fd5d16
+      size: 844559
+    - path: src/data/train_dev_split.py
+      md5: 4a9bdf04f29c471d103c326f9c690c57
+      size: 1097
+    params:
+      params.yaml:
+        train_dev_split:
+          dataset: dbbook
+          dev_size: 0.2
+          seed: 42
+    outs:
+    - path: data/interim/dbbook/dev.tsv
+      md5: 7b1cfaae91157238cf7c322a375cbab2
+      size: 167390
+    - path: data/interim/dbbook/test.tsv
+      md5: 1aec882c129865dbc596c09d601b7317
+      size: 739190
+    - path: data/interim/dbbook/train.tsv
+      md5: ed1b32ec8e386f6f490077fc3f7b630e
+      size: 677169
+  map_item_features:
+    cmd: python -m src.data.map_item_features
+    deps:
+    - path: data/raw/dbbook/item-prop/train.tsv
+      md5: 3d04ba7724fa2fdb79b99b8ac8dd2b70
+      size: 222156
+    - path: src/data/map_item_features.py
+      md5: 4bead85ed45d3f83cf3aae973c513a33
+      size: 2929
+    outs:
+    - path: data/interim/dbbook/item-prop/train.tsv
+      md5: 7f2a9b929f3b65c8bc55155989d5419b
+      size: 337039
+  buils_users_profiles:
+    cmd: python -m src.data.build_users_profiles
+    deps:
+    - path: data/interim/dbbook/dev.tsv
+      md5: 7b1cfaae91157238cf7c322a375cbab2
+      size: 167390
+    - path: data/interim/dbbook/item-prop/train.tsv
+      md5: 7f2a9b929f3b65c8bc55155989d5419b
+      size: 337039
+    - path: data/interim/dbbook/test.tsv
+      md5: 1aec882c129865dbc596c09d601b7317
+      size: 739190
+    - path: data/interim/dbbook/train.tsv
+      md5: ed1b32ec8e386f6f490077fc3f7b630e
+      size: 677169
+    - path: src/data/build_users_profiles.py
+      md5: a9a67ac8ad5cb9d74c35a023fb70b563
+      size: 2135
+    outs:
+    - path: data/processed/dbbook/dev.tsv
+      md5: 625b0c13a3db579de467d92315b29e27
+      size: 696980
+    - path: data/processed/dbbook/test.tsv
+      md5: 568948079b581060ebea94393baf4472
+      size: 2817370
+    - path: data/processed/dbbook/train.tsv
+      md5: 12410be58d46483392f516513c41cb03
+      size: 2802741
+  truncate_texts:
+    cmd: python -m src.data.truncate_texts
+    deps:
+    - path: data/raw/dbbook/texts
+      md5: 95f447285e969fcb34eda64d455c99de.dir
+      size: 46896294
+      nfiles: 8170
+    - path: src/data/truncate_texts.py
+      md5: 683a42257f5961d220573178fb4516a5
+      size: 1358
+    params:
+      params.yaml:
+        truncate_texts:
+          task_name: truncate
+          data_dir: data/raw/dbbook
+          max_seq_length: 128
+          always_preprocess: true
+    outs:
+    - path: data/processed/dbbook/texts
+      md5: 6133623f9bacac9ee9e50a68d0c23e56.dir
+      size: 4059615
+      nfiles: 8170

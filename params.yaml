@@ -1,0 +1,9 @@
+train_dev_split:
+  dataset: dbbook
+  dev_size: 0.2
+  seed: 42
+truncate_texts:
+  task_name: "truncate"
+  data_dir: "data/raw/dbbook"
+  max_seq_length: 128
+  always_preprocess: true

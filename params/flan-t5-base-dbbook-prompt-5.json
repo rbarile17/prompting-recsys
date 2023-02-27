@@ -1,0 +1,23 @@
+{
+    "task_name": "dbbook",
+    "model_name_or_path": "google/flan-t5-base",
+    "data_dir": "./data/processed/dbbook",
+    "always_preprocess": false,
+    "template": "We will describe a book and the reading tastes of the reader user_*user_id*, we want to know if such book is a good fit for the reader. *item_text*. User likes the book genres: *user_genres*, will he appreciate the book?",
+    "mapping": "{0:'No', 1:'Yes'}",
+    "output_dir": "models/flan-t5-base-dbbook-prompt-5",
+    "overwrite_output_dir": true,
+    "predict_with_generate": true,
+    "max_steps": 16540,
+    "evaluation_strategy": "epoch",
+    "save_strategy": "epoch",
+    "logging_strategy": "steps",
+    "logging_steps": 10,
+    "per_device_train_batch_size": 8,
+    "per_device_eval_batch_size": 8,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 3e-04,
+    "warmup_ratio": 0.2,
+    "run_name": "flan-t5-base-dbbook-prompt-5",
+    "seed": 42
+}

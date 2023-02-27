@@ -1,0 +1,9 @@
+dataclasses
+dvc
+huggingface
+mlflow
+pandas
+torch
+tqdm
+transformers
+sentencepiece

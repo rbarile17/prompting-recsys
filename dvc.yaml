@@ -1,0 +1,40 @@
+stages:
+  map_item_features:
+    cmd: python -m src.data.map_item_features
+    deps:
+    - data/raw/dbbook/item-prop/train.tsv
+    - src/data/map_item_features.py
+    outs:
+    - data/interim/dbbook/item-prop/train.tsv
+  train_dev_split:
+    cmd: python -m src.data.train_dev_split
+    deps:
+    - data/raw/dbbook/train.tsv
+    - src/data/train_dev_split.py
+    params:
+    - train_dev_split
+    outs:
+    - data/interim/dbbook/train.tsv
+    - data/interim/dbbook/dev.tsv
+    - data/interim/dbbook/test.tsv
+  buils_users_profiles:
+    cmd: python -m src.data.build_users_profiles
+    deps:
+    - data/interim/dbbook/train.tsv
+    - data/interim/dbbook/dev.tsv
+    - data/interim/dbbook/test.tsv
+    - data/interim/dbbook/item-prop/train.tsv
+    - src/data/build_users_profiles.py
+    outs:
+    - data/processed/dbbook/train.tsv
+    - data/processed/dbbook/dev.tsv
+    - data/processed/dbbook/test.tsv
+  truncate_texts:
+    cmd: python -m src.data.truncate_texts
+    params:
+    - truncate_texts
+    deps:
+    - data/raw/dbbook/texts
+    - src/data/truncate_texts.py
+    outs:
+    - data/processed/dbbook/texts
